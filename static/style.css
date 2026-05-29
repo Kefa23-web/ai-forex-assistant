@@ -1,0 +1,270 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:
+    linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #111827
+    );
+
+    color:white;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+
+.navbar{
+    width:100%;
+    padding:20px 40px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(10px);
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#22c55e;
+}
+
+.nav-links{
+    display:flex;
+    gap:20px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    opacity:0.8;
+}
+
+.nav-links a:hover{
+    opacity:1;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:40px 0;
+}
+
+/* HERO */
+
+.hero{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hero h1{
+    font-size:56px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:#94a3b8;
+    font-size:18px;
+}
+
+/* DASHBOARD GRID */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+
+    gap:25px;
+}
+
+/* GLASS CARD */
+
+.card{
+    background:
+    rgba(255,255,255,0.05);
+
+    border:
+    1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:
+    0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* SIGNAL CARD */
+
+.signal{
+    font-size:42px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.buy{
+    color:#22c55e;
+}
+
+.sell{
+    color:#ef4444;
+}
+
+.wait{
+    color:#facc15;
+}
+
+/* PRICE */
+
+.price{
+    font-size:34px;
+    margin:15px 0;
+}
+
+/* EXPLANATION */
+
+.explanation{
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+/* SELECT */
+
+select{
+    width:100%;
+    padding:16px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#1e293b;
+    color:white;
+
+    font-size:16px;
+
+    margin-bottom:20px;
+}
+
+/* BUTTON */
+
+button{
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+    border-radius:12px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #22c55e,
+        #16a34a
+    );
+
+    color:white;
+
+    font-size:18px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    opacity:0.95;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:20px;
+}
+
+.stat-box{
+    background:
+    rgba(255,255,255,0.05);
+
+    padding:15px;
+
+    border-radius:14px;
+
+    text-align:center;
+}
+
+.stat-box h3{
+    color:#94a3b8;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.stat-box p{
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* CHART */
+
+.chart-container{
+    margin-top:30px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    border:
+    1px solid rgba(255,255,255,0.1);
+}
+
+/* LOADING */
+
+.loading{
+    color:#94a3b8;
+    text-align:center;
+    padding:20px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+}

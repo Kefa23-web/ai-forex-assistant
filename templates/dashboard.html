@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+    href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="logo">
+        AI Forex Assistant
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Signals</a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1>
+            Welcome {{ username }}
+        </h1>
+
+        <p>
+            Your AI trading dashboard
+        </p>
+
+    </div>
+
+    <div class="dashboard">
+
+        <div class="card">
+
+            <h2>
+                Account Status
+            </h2>
+
+            <div class="stats">
+
+                <div class="stat-box">
+                    <h3>Plan</h3>
+                    <p>Free</p>
+                </div>
+
+                <div class="stat-box">
+                    <h3>Signals</h3>
+                    <p>24</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+                Quick Access
+            </h2>
+
+            <br>
+
+            <button
+            onclick="window.location.href='/'">
+
+                Open Signal Dashboard
+
+            </button>
+
+            <br><br>
+
+            <button
+            onclick="window.location.href='/payment'">
+
+                Upgrade to Premium
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

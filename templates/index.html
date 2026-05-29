@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>AI Forex Assistant</title>
+
+    <link rel="stylesheet"
+    href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            AI Forex Assistant
+        </div>
+
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="#">Signals</a>
+            <a href="#">Analytics</a>
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+        <!-- HERO -->
+
+        <div class="hero">
+
+            <h1>
+                Smart AI Forex Signals
+            </h1>
+
+            <p>
+                Live market analysis powered by AI
+            </p>
+
+        </div>
+
+        <!-- DASHBOARD -->
+
+        <div class="dashboard">
+
+            <!-- SIGNAL CARD -->
+
+            <div class="card">
+
+                <select id="pair"
+                onchange="updateChart()">
+
+                    <option value="OANDA:XAUUSD">
+                        XAUUSD
+                    </option>
+
+                    <option value="OANDA:EURUSD">
+                        EURUSD
+                    </option>
+
+                    <option value="OANDA:GBPUSD">
+                        GBPUSD
+                    </option>
+
+                    <option value="OANDA:USDJPY">
+                        USDJPY
+                    </option>
+
+                </select>
+
+                <button onclick="getSignal()">
+                    Analyze Market
+                </button>
+
+                <div id="result"></div>
+
+            </div>
+
+            <!-- STATS CARD -->
+
+            <div class="card">
+
+                <h2>
+                    Market Stats
+                </h2>
+
+                <div class="stats">
+
+                    <div class="stat-box">
+                        <h3>Accuracy</h3>
+                        <p>87%</p>
+                    </div>
+
+                    <div class="stat-box">
+                        <h3>Signals Today</h3>
+                        <p>14</p>
+                    </div>
+
+                    <div class="stat-box">
+                        <h3>Win Rate</h3>
+                        <p>79%</p>
+                    </div>
+
+                    <div class="stat-box">
+                        <h3>Trend</h3>
+                        <p>Bullish</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+
+        <div class="chart-container">
+
+            <div class="tradingview-widget-container">
+
+                <div id="tradingview_chart"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<script src="/static/script.js"></script>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+
+function loadChart(symbol){
+
+    new TradingView.widget({
+
+        "width":"100%",
+        "height":550,
+
+        "symbol":symbol,
+
+        "interval":"5",
+
+        "timezone":"Africa/Nairobi",
+
+        "theme":"dark",
+
+        "style":"1",
+
+        "locale":"en",
+
+        "toolbar_bg":"#0f172a",
+
+        "enable_publishing":false,
+
+        "allow_symbol_change":true,
+
+        "container_id":"tradingview_chart"
+    });
+}
+
+loadChart("OANDA:XAUUSD");
+
+function updateChart(){
+
+    let pair =
+    document.getElementById("pair").value;
+
+    document.getElementById(
+    "tradingview_chart"
+    ).innerHTML = "";
+
+    loadChart(pair);
+}
+
+</script>
+
+</body>
+</html>
