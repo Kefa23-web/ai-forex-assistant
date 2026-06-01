@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
     content="width=device-width, initial-scale=1.0">
 
-    <title>AI Forex Assistant</title>
+    <title>SmartFX AI</title>
 
     <link rel="stylesheet"
     href="/static/style.css">
+
 </head>
 
 <body>
@@ -18,42 +22,49 @@
     <div class="navbar">
 
         <div class="logo">
-            AI Forex Assistant
+            SmartFX AI
         </div>
 
         <div class="nav-links">
-            <a href="#">Dashboard</a>
-            <a href="#">Signals</a>
-            <a href="#">Analytics</a>
+
+            <a href="/">Home</a>
+
+            <a href="/about">About</a>
+
+            <a href="/contact">Contact</a>
+
+            <a href="/login">Login</a>
+
         </div>
 
     </div>
 
-    <!-- MAIN -->
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <h1>
+            AI-Powered Forex Analysis
+        </h1>
+
+        <p>
+            Analyze markets, receive smart signals
+            and improve your trading decisions.
+        </p>
+
+    </div>
+
+    <!-- MAIN CONTAINER -->
 
     <div class="container">
-
-        <!-- HERO -->
-
-        <div class="hero">
-
-            <h1>
-                Smart AI Forex Signals
-            </h1>
-
-            <p>
-                Live market analysis powered by AI
-            </p>
-
-        </div>
-
-        <!-- DASHBOARD -->
 
         <div class="dashboard">
 
             <!-- SIGNAL CARD -->
 
             <div class="card">
+
+                <h2>Select Trading Pair</h2>
 
                 <select id="pair"
                 onchange="updateChart()">
@@ -84,34 +95,46 @@
 
             </div>
 
-            <!-- STATS CARD -->
+            <!-- MARKET STATS -->
 
             <div class="card">
 
                 <h2>
-                    Market Stats
+                    Market Statistics
                 </h2>
 
                 <div class="stats">
 
                     <div class="stat-box">
+
                         <h3>Accuracy</h3>
+
                         <p>87%</p>
+
                     </div>
 
                     <div class="stat-box">
-                        <h3>Signals Today</h3>
+
+                        <h3>Signals</h3>
+
                         <p>14</p>
+
                     </div>
 
                     <div class="stat-box">
+
                         <h3>Win Rate</h3>
+
                         <p>79%</p>
+
                     </div>
 
                     <div class="stat-box">
+
                         <h3>Trend</h3>
+
                         <p>Bullish</p>
+
                     </div>
 
                 </div>
@@ -124,6 +147,10 @@
 
         <div class="chart-container">
 
+            <h2>
+                Live Market Chart
+            </h2>
+
             <div class="tradingview-widget-container">
 
                 <div id="tradingview_chart"></div>
@@ -133,6 +160,31 @@
         </div>
 
     </div>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <h3>
+            SmartFX AI
+        </h3>
+
+        <p>
+            AI-powered forex market analysis
+            and trading signals.
+        </p>
+
+        <p>
+            Forex trading carries risk.
+            Past performance does not guarantee
+            future results.
+        </p>
+
+        <p>
+            © 2026 SmartFX AI
+        </p>
+
+    </footer>
 
 <script src="/static/script.js"></script>
 
@@ -145,6 +197,7 @@ function loadChart(symbol){
     new TradingView.widget({
 
         "width":"100%",
+
         "height":550,
 
         "symbol":symbol,
@@ -166,7 +219,9 @@ function loadChart(symbol){
         "allow_symbol_change":true,
 
         "container_id":"tradingview_chart"
+
     });
+
 }
 
 loadChart("OANDA:XAUUSD");
@@ -181,9 +236,11 @@ function updateChart(){
     ).innerHTML = "";
 
     loadChart(pair);
+
 }
 
 </script>
 
 </body>
+
 </html>

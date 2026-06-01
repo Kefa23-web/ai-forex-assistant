@@ -21,6 +21,7 @@ from werkzeug.security import (
 )
 
 import requests
+import os
 
 from database import db, User
 
@@ -30,7 +31,10 @@ from database import db, User
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "secret123"
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY",
+    "fallback-secret-key"
+)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     "sqlite:///users.db"
@@ -54,14 +58,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 # =========================
-# API KEYS
+# ENVIRONMENT VARIABLES
 # =========================
 
-API_KEY = "c5275832b53746aaa91c73e81ebc8029"
+API_KEY = os.environ.get("API_KEY")
 
-BOT_TOKEN = "8732156110:AAFO7w_fYgjEwXp_UGeYEOPI0U0q3v-kA0k"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
-CHAT_ID = "8526786741"
+CHAT_ID = os.environ.get("CHAT_ID")
 
 # =========================
 # TELEGRAM FUNCTION
@@ -69,18 +73,28 @@ CHAT_ID = "8526786741"
 
 def send_telegram_message(message):
 
-    telegram_url = (
-        f"https://api.telegram.org/"
-        f"bot{BOT_TOKEN}/sendMessage"
-    )
+    try:
 
-    requests.get(
-        telegram_url,
-        params={
-            "chat_id": CHAT_ID,
-            "text": message
-        }
-    )
+        if not BOT_TOKEN or not CHAT_ID:
+            return
+
+        telegram_url = (
+            f"https://api.telegram.org/"
+            f"bot{BOT_TOKEN}/sendMessage"
+        )
+
+        requests.get(
+            telegram_url,
+            params={
+                "chat_id": CHAT_ID,
+                "text": message
+            },
+            timeout=10
+        )
+
+    except Exception as e:
+
+        print("Telegram Error:", e)
 
 # =========================
 # CREATE DATABASE
@@ -90,6 +104,15 @@ with app.app_context():
     db.create_all()
 
 # =========================
+# HEALTH CHECK
+# =========================
+
+@app.route("/health")
+def health():
+
+    return "OK"
+
+# =========================
 # HOME
 # =========================
 
@@ -97,6 +120,24 @@ with app.app_context():
 def home():
 
     return render_template("index.html")
+
+# =========================
+# ABOUT PAGE
+# =========================
+
+@app.route("/about")
+def about():
+
+    return render_template("about.html")
+
+# =========================
+# CONTACT PAGE
+# =========================
+
+@app.route("/contact")
+def contact():
+
+    return render_template("contact.html")
 
 # =========================
 # REGISTER
@@ -111,10 +152,6 @@ def register():
 
         password = request.form["password"]
 
-        hashed_password = (
-            generate_password_hash(password)
-        )
-
         existing_user = User.query.filter_by(
             username=username
         ).first()
@@ -122,6 +159,10 @@ def register():
         if existing_user:
 
             return "Username already exists"
+
+        hashed_password = generate_password_hash(
+            password
+        )
 
         new_user = User(
             username=username,
@@ -153,14 +194,19 @@ def login():
             username=username
         ).first()
 
-        if user and check_password_hash(
-            user.password,
-            password
+        if (
+            user and
+            check_password_hash(
+                user.password,
+                password
+            )
         ):
 
             login_user(user)
 
-            return redirect(url_for("dashboard"))
+            return redirect(
+                url_for("dashboard")
+            )
 
         return "Invalid username or password"
 
@@ -187,7 +233,9 @@ def dashboard():
 @login_required
 def payment():
 
-    return render_template("payment.html")
+    return render_template(
+        "payment.html"
+    )
 
 # =========================
 # LOGOUT
@@ -199,7 +247,9 @@ def logout():
 
     logout_user()
 
-    return redirect(url_for("login"))
+    return redirect(
+        url_for("login")
+    )
 
 # =========================
 # SIGNAL API
@@ -227,7 +277,16 @@ def signal():
             "XAUUSD": "XAU/USD"
         }
 
-        api_pair = symbol_map[pair]
+        api_pair = symbol_map.get(pair)
+
+        if not api_pair:
+
+            return jsonify({
+                "signal": "ERROR",
+                "price": "N/A",
+                "explanation":
+                "Invalid pair selected."
+            })
 
         url = (
             f"https://api.twelvedata.com/"
@@ -238,9 +297,21 @@ def signal():
             f"&apikey={API_KEY}"
         )
 
-        response = requests.get(url)
+        response = requests.get(
+            url,
+            timeout=15
+        )
 
         market_data = response.json()
+
+        if "values" not in market_data:
+
+            return jsonify({
+                "signal": "ERROR",
+                "price": "N/A",
+                "explanation":
+                "Market data unavailable."
+            })
 
         candles = market_data["values"]
 
@@ -265,7 +336,8 @@ def signal():
         for i in range(1, len(prices)):
 
             change = (
-                prices[i - 1] - prices[i]
+                prices[i - 1] -
+                prices[i]
             )
 
             if change > 0:
@@ -274,7 +346,9 @@ def signal():
 
             else:
 
-                losses.append(abs(change))
+                losses.append(
+                    abs(change)
+                )
 
         avg_gain = (
             sum(gains) / len(gains)
@@ -288,10 +362,14 @@ def signal():
 
         rs = avg_gain / avg_loss
 
-        rsi = 100 - (100 / (1 + rs))
+        rsi = (
+            100 -
+            (100 / (1 + rs))
+        )
 
         if (
-            current_price > average_price
+            current_price >
+            average_price
             and rsi < 70
         ):
 
@@ -303,7 +381,8 @@ def signal():
             )
 
         elif (
-            current_price < average_price
+            current_price <
+            average_price
             and rsi > 30
         ):
 
@@ -323,7 +402,8 @@ def signal():
                 f"RSI: {round(rsi,2)}"
             )
 
-        telegram_message = f"""
+        send_telegram_message(
+            f"""
 🚀 {signal} SIGNAL
 
 Pair: {pair}
@@ -334,27 +414,34 @@ RSI: {round(rsi,2)}
 
 {explanation}
 """
-
-        send_telegram_message(
-            telegram_message
         )
 
         return jsonify({
+
             "signal": signal,
+
             "price": current_price,
-            "rsi": round(rsi,2),
-            "explanation": explanation
+
+            "rsi": round(rsi, 2),
+
+            "explanation":
+            explanation
+
         })
 
     except Exception as e:
 
-        print(e)
+        print("Signal Error:", e)
 
         return jsonify({
+
             "signal": "ERROR",
+
             "price": "N/A",
+
             "explanation":
             "Could not fetch data."
+
         })
 
 # =========================
